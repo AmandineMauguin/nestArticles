@@ -59,5 +59,19 @@ export class ArticlesService {
     }
     if (article.title) articleToUpdate.title = article.title;
     if (article.content) articleToUpdate.content = article.content;
+    const updatedArticles = this.articles.map((a) =>
+      a.id !== +id ? a : articleToUpdate,
+    );
+    this.articles = [...updatedArticles];
+    return { articleToUpdate: 1, article: updatedArticles };
+  }
+
+  delete(id: string) {
+    const articleToDelete = this.articles.findIndex((a) => a.id === +id);
+    if (articleToDelete < 0) {
+      return new NotFoundException('Oups, there is no match for this id : ');
+    }
+    this.articles.splice(articleToDelete, 1);
+    return { articleToDelete: 1, articles: this.articles };
   }
 }
